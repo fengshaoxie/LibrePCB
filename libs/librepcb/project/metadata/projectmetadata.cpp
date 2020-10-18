@@ -49,16 +49,17 @@ ProjectMetadata::ProjectMetadata(const Uuid& uuid, const ElementName& name,
     mLastModified(lastModified) {
 }
 
-ProjectMetadata::ProjectMetadata(const SExpression& node)
+ProjectMetadata::ProjectMetadata(const SExpression& node,
+                                 const Version& fileFormat)
   : QObject(nullptr), mUuid(Uuid::createRandom()), mName("Project") {
   qDebug() << "load project metadata...";
 
-  mUuid = deserialize<Uuid>(node.getChild("@0"));
-  mName = deserialize<ElementName>(node.getChild("name/@0"));
-  mAuthor = deserialize<QString>(node.getChild("author/@0"));
-  mVersion = deserialize<QString>(node.getChild("version/@0"));
-  mCreated = deserialize<QDateTime>(node.getChild("created/@0"));
-  mAttributes.loadFromSExpression(node);  // can throw
+  mUuid = deserialize<Uuid>(node.getChild("@0"), fileFormat);
+  mName = deserialize<ElementName>(node.getChild("name/@0"), fileFormat);
+  mAuthor = deserialize<QString>(node.getChild("author/@0"), fileFormat);
+  mVersion = deserialize<QString>(node.getChild("version/@0"), fileFormat);
+  mCreated = deserialize<QDateTime>(node.getChild("created/@0"), fileFormat);
+  mAttributes.loadFromSExpression(node, fileFormat);  // can throw
 
   mLastModified = QDateTime::currentDateTime();
 

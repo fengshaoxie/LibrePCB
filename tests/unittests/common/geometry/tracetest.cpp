@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/geometry/trace.h>
 
 /*******************************************************************************
@@ -46,7 +47,7 @@ TEST_F(TraceTest, testSerializeAndDeserialize) {
              TraceAnchor::pad(Uuid::createRandom(), Uuid::createRandom()));
   SExpression sexpr1 = obj1.serializeToDomElement("trace");
 
-  Trace obj2(sexpr1);
+  Trace obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("trace");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/boarddesignrules.h>
 
 /*******************************************************************************
@@ -55,7 +56,7 @@ TEST_F(BoardDesignRulesTest, testSerializeAndDeserialize) {
   obj1.setRestringViaBounds(UnsignedLength(333), UnsignedLength(444));
   SExpression sexpr1 = obj1.serializeToDomElement("rules");
 
-  BoardDesignRules obj2(sexpr1);
+  BoardDesignRules obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("rules");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

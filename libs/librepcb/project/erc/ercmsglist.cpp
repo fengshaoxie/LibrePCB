@@ -75,7 +75,7 @@ void ErcMsgList::update(ErcMsg* ercMsg) noexcept {
   emit ercMsgChanged(ercMsg);
 }
 
-void ErcMsgList::restoreIgnoreState() {
+void ErcMsgList::restoreIgnoreState(const Version& fileFormat) {
   QString fp = "circuit/erc.lp";
   if (mProject.getDirectory().fileExists(fp)) {
     SExpression root =
@@ -90,11 +90,11 @@ void ErcMsgList::restoreIgnoreState() {
     foreach (const SExpression& node, root.getChildren("approved")) {
       foreach (ErcMsg* ercMsg, mItems) {
         if ((ercMsg->getOwner().getErcMsgOwnerClassName() ==
-             deserialize<QString>(node.getChild("class/@0"))) &&
+             deserialize<QString>(node.getChild("class/@0"), fileFormat)) &&
             (ercMsg->getOwnerKey() ==
-             deserialize<QString>(node.getChild("instance/@0"))) &&
+             deserialize<QString>(node.getChild("instance/@0"), fileFormat)) &&
             (ercMsg->getMsgKey() ==
-             deserialize<QString>(node.getChild("message/@0")))) {
+             deserialize<QString>(node.getChild("message/@0"), fileFormat))) {
           ercMsg->setIgnored(true);
         }
       }

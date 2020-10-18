@@ -68,51 +68,54 @@ BoardFabricationOutputSettings::BoardFabricationOutputSettings(
 }
 
 BoardFabricationOutputSettings::BoardFabricationOutputSettings(
-    const SExpression& node)
+    const SExpression& node, const Version& fileFormat)
   : BoardFabricationOutputSettings()  // init and load defaults
 {
-  mOutputBasePath = deserialize<QString>(node.getChild("base_path/@0"));
-  mSuffixOutlines = deserialize<QString>(node.getChild("outlines/suffix/@0"));
+  mOutputBasePath =
+      deserialize<QString>(node.getChild("base_path/@0"), fileFormat);
+  mSuffixOutlines =
+      deserialize<QString>(node.getChild("outlines/suffix/@0"), fileFormat);
   mSuffixCopperTop =
-      deserialize<QString>(node.getChild("copper_top/suffix/@0"));
+      deserialize<QString>(node.getChild("copper_top/suffix/@0"), fileFormat);
   mSuffixCopperInner =
-      deserialize<QString>(node.getChild("copper_inner/suffix/@0"));
+      deserialize<QString>(node.getChild("copper_inner/suffix/@0"), fileFormat);
   mSuffixCopperBot =
-      deserialize<QString>(node.getChild("copper_bot/suffix/@0"));
-  mSuffixSolderMaskTop =
-      deserialize<QString>(node.getChild("soldermask_top/suffix/@0"));
-  mSuffixSolderMaskBot =
-      deserialize<QString>(node.getChild("soldermask_bot/suffix/@0"));
-  mSuffixSilkscreenTop =
-      deserialize<QString>(node.getChild("silkscreen_top/suffix/@0"));
-  mSuffixSilkscreenBot =
-      deserialize<QString>(node.getChild("silkscreen_bot/suffix/@0"));
-  mSuffixSolderPasteTop =
-      deserialize<QString>(node.getChild("solderpaste_top/suffix/@0"));
-  mSuffixSolderPasteBot =
-      deserialize<QString>(node.getChild("solderpaste_bot/suffix/@0"));
+      deserialize<QString>(node.getChild("copper_bot/suffix/@0"), fileFormat);
+  mSuffixSolderMaskTop = deserialize<QString>(
+      node.getChild("soldermask_top/suffix/@0"), fileFormat);
+  mSuffixSolderMaskBot = deserialize<QString>(
+      node.getChild("soldermask_bot/suffix/@0"), fileFormat);
+  mSuffixSilkscreenTop = deserialize<QString>(
+      node.getChild("silkscreen_top/suffix/@0"), fileFormat);
+  mSuffixSilkscreenBot = deserialize<QString>(
+      node.getChild("silkscreen_bot/suffix/@0"), fileFormat);
+  mSuffixSolderPasteTop = deserialize<QString>(
+      node.getChild("solderpaste_top/suffix/@0"), fileFormat);
+  mSuffixSolderPasteBot = deserialize<QString>(
+      node.getChild("solderpaste_bot/suffix/@0"), fileFormat);
   mSuffixDrillsPth =
-      deserialize<QString>(node.getChild("drills/suffix_pth/@0"));
+      deserialize<QString>(node.getChild("drills/suffix_pth/@0"), fileFormat);
   mSuffixDrillsNpth =
-      deserialize<QString>(node.getChild("drills/suffix_npth/@0"));
-  mSuffixDrills =
-      deserialize<QString>(node.getChild("drills/suffix_merged/@0"));
-  mMergeDrillFiles = deserialize<bool>(node.getChild("drills/merge/@0"));
+      deserialize<QString>(node.getChild("drills/suffix_npth/@0"), fileFormat);
+  mSuffixDrills = deserialize<QString>(node.getChild("drills/suffix_merged/@0"),
+                                       fileFormat);
+  mMergeDrillFiles =
+      deserialize<bool>(node.getChild("drills/merge/@0"), fileFormat);
   mEnableSolderPasteTop =
-      deserialize<bool>(node.getChild("solderpaste_top/create/@0"));
+      deserialize<bool>(node.getChild("solderpaste_top/create/@0"), fileFormat);
   mEnableSolderPasteBot =
-      deserialize<bool>(node.getChild("solderpaste_bot/create/@0"));
+      deserialize<bool>(node.getChild("solderpaste_bot/create/@0"), fileFormat);
 
   mSilkscreenLayersTop.clear();
   foreach (const SExpression& child,
            node.getChild("silkscreen_top/layers").getChildren()) {
-    mSilkscreenLayersTop.append(deserialize<QString>(child));
+    mSilkscreenLayersTop.append(deserialize<QString>(child, fileFormat));
   }
 
   mSilkscreenLayersBot.clear();
   foreach (const SExpression& child,
            node.getChild("silkscreen_bot/layers").getChildren()) {
-    mSilkscreenLayersBot.append(deserialize<QString>(child));
+    mSilkscreenLayersBot.append(deserialize<QString>(child, fileFormat));
   }
 }
 

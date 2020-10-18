@@ -48,8 +48,10 @@ public:
   MinimalSerializableObjectMock() = delete;
   MinimalSerializableObjectMock(const QString& value)
     : mValue(value), onEdited(*this) {}
-  MinimalSerializableObjectMock(const SExpression& root)
-    : mValue(deserialize<QString>(root.getChild("@0"))), onEdited(*this) {}
+  MinimalSerializableObjectMock(const SExpression& root,
+                                const Version& fileFormat)
+    : mValue(deserialize<QString>(root.getChild("@0"), fileFormat)),
+      onEdited(*this) {}
   MinimalSerializableObjectMock(MinimalSerializableObjectMock&& other) = delete;
   MinimalSerializableObjectMock(const MinimalSerializableObjectMock& other) =
       delete;
@@ -83,9 +85,9 @@ public:
       onEdited(*this) {}
   SerializableObjectMock(const Uuid& uuid, const QString& name)
     : mUuid(uuid), mName(name), onEdited(*this) {}
-  SerializableObjectMock(const SExpression& root)
-    : mUuid(deserialize<Uuid>(root.getChild("@0"))),
-      mName(deserialize<QString>(root.getChild("name/@0"))),
+  SerializableObjectMock(const SExpression& root, const Version& fileFormat)
+    : mUuid(deserialize<Uuid>(root.getChild("@0"), fileFormat)),
+      mName(deserialize<QString>(root.getChild("name/@0"), fileFormat)),
       onEdited(*this) {}
   ~SerializableObjectMock() {}
 

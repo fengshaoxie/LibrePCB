@@ -23,6 +23,7 @@
 
 #include <gtest/gtest.h>
 #include <librepcb/common/alignment.h>
+#include <librepcb/common/application.h>
 
 /*******************************************************************************
  *  Namespace
@@ -59,9 +60,11 @@ TEST_P(AlignmentTest, testConstructFromSExpression) {
   SExpression sexpr = SExpression::parse(data.serialized, FilePath());
 
   if (data.validSExpression) {
-    EXPECT_EQ(Alignment(data.hAlign, data.vAlign), Alignment(sexpr));
+    EXPECT_EQ(Alignment(data.hAlign, data.vAlign),
+              Alignment(sexpr, qApp->getFileFormatVersion()));
   } else {
-    EXPECT_THROW({ Alignment a(sexpr); }, RuntimeError);
+    EXPECT_THROW({ Alignment a(sexpr, qApp->getFileFormatVersion()); },
+                 RuntimeError);
   }
 }
 

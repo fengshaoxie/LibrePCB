@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/geometry/stroketext.h>
 
 /*******************************************************************************
@@ -48,7 +49,7 @@ TEST_F(StrokeTextTest, testSerializeAndDeserialize) {
                   Alignment(HAlign::right(), VAlign::center()), true, false);
   SExpression sexpr1 = obj1.serializeToDomElement("text");
 
-  StrokeText obj2(sexpr1);
+  StrokeText obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("text");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

@@ -65,7 +65,8 @@ std::unique_ptr<AsyncCopyOperation>
 }
 
 void InitializeWorkspaceWizardContext::initializeEmptyWorkspace() const {
-  workspace::Workspace ws(mWorkspacePath);  // can throw
+  workspace::Workspace ws(mWorkspacePath,
+                          qApp->getFileFormatVersion());  // can throw
   ws.getSettings().applicationLocale.set(mAppLocale);
   ws.getSettings().defaultLengthUnit.set(mLengthUnit);
   ws.getSettings().libraryNormOrder.set(mLibraryNormOrder);

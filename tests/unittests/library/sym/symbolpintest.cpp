@@ -21,6 +21,7 @@
  *  Includes
  ******************************************************************************/
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/library/sym/symbolpin.h>
 
 #include <QtCore>
@@ -47,7 +48,7 @@ TEST_F(SymbolPinTest, testSerializeAndDeserialize) {
                  Point(123, 567), UnsignedLength(321), Angle(789));
   SExpression sexpr1 = obj1.serializeToDomElement("pin");
 
-  SymbolPin obj2(sexpr1);
+  SymbolPin obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("pin");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

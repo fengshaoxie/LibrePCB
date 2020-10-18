@@ -63,7 +63,7 @@ public:
   void add(ErcMsg* ercMsg) noexcept;
   void remove(ErcMsg* ercMsg) noexcept;
   void update(ErcMsg* ercMsg) noexcept;
-  void restoreIgnoreState();
+  void restoreIgnoreState(const Version& fileFormat);
   void save();
 
   // Operator Overloadings

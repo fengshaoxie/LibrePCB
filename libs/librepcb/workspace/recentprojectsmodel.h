@@ -31,6 +31,9 @@
  *  Namespace / Forward Declarations
  ******************************************************************************/
 namespace librepcb {
+
+class Version;
+
 namespace workspace {
 
 class Workspace;
@@ -49,7 +52,8 @@ public:
   // Constructors / Destructor
   RecentProjectsModel() = delete;
   RecentProjectsModel(const RecentProjectsModel& other) = delete;
-  explicit RecentProjectsModel(const Workspace& workspace) noexcept;
+  RecentProjectsModel(const Workspace& workspace,
+                      const Version& fileFormat) noexcept;
   ~RecentProjectsModel() noexcept;
 
   // General Methods

@@ -40,7 +40,8 @@ namespace workspace {
  *  Constructors / Destructor
  ******************************************************************************/
 
-RecentProjectsModel::RecentProjectsModel(const Workspace& workspace) noexcept
+RecentProjectsModel::RecentProjectsModel(const Workspace& workspace,
+                                         const Version& fileFormat) noexcept
   : QAbstractListModel(nullptr), mWorkspace(workspace) {
   try {
     mFilePath = mWorkspace.getMetadataPath().getPathTo("recent_projects.lp");
@@ -49,7 +50,7 @@ RecentProjectsModel::RecentProjectsModel(const Workspace& workspace) noexcept
           SExpression::parse(FileUtils::readFile(mFilePath), mFilePath);
       const QList<SExpression>& childs = root.getChildren("project");
       foreach (const SExpression& child, childs) {
-        QString path = deserialize<QString>(child.getChild("@0"));
+        QString path = deserialize<QString>(child.getChild("@0"), fileFormat);
         FilePath absPath = FilePath::fromRelative(mWorkspace.getPath(), path);
         mAllProjects.append(absPath);
       }

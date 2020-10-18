@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/geometry/polygon.h>
 
 /*******************************************************************************
@@ -47,7 +48,7 @@ TEST_F(PolygonTest, testSerializeAndDeserialize) {
       Path({Vertex(Point(1, 2), Angle(3)), Vertex(Point(4, 5), Angle(6))}));
   SExpression sexpr1 = obj1.serializeToDomElement("polygon");
 
-  Polygon obj2(sexpr1);
+  Polygon obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("polygon");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

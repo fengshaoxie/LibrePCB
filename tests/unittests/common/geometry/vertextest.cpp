@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/geometry/vertex.h>
 
 /*******************************************************************************
@@ -44,7 +45,7 @@ TEST_F(VertexTest, testSerializeAndDeserialize) {
   Vertex obj1(Point(123, 567), Angle(789));
   SExpression sexpr1 = obj1.serializeToDomElement("vertex");
 
-  Vertex obj2(sexpr1);
+  Vertex obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("vertex");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

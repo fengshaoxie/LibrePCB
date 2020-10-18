@@ -21,6 +21,7 @@
  *  Includes
  ******************************************************************************/
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/fileio/fileutils.h>
 #include <librepcb/workspace/settings/workspacesettings.h>
 
@@ -47,7 +48,7 @@ TEST_F(WorkspaceSettingsTest, testStoreAndLoad) {
   FilePath fp = FilePath::getRandomTempPath().getPathTo("test.lp");
 
   // Store
-  WorkspaceSettings obj1(fp);
+  WorkspaceSettings obj1(fp, qApp->getFileFormatVersion());
   obj1.userName.set("foo bar");
   obj1.applicationLocale.set("de_CH");
   obj1.defaultLengthUnit.set(LengthUnit::nanometers());
@@ -62,7 +63,7 @@ TEST_F(WorkspaceSettingsTest, testStoreAndLoad) {
   obj1.saveToFile();
 
   // Load
-  WorkspaceSettings obj2(fp);
+  WorkspaceSettings obj2(fp, qApp->getFileFormatVersion());
   EXPECT_EQ(obj1.userName.get().toStdString(),
             obj2.userName.get().toStdString());
   EXPECT_EQ(obj1.applicationLocale.get().toStdString(),

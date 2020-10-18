@@ -21,6 +21,7 @@
  *  Includes
  ******************************************************************************/
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/attributes/attributekey.h>
 
 /*******************************************************************************
@@ -86,10 +87,12 @@ TEST_P(AttributeKeyTest, testDeserialize) {
 
   if (data.valid) {
     EXPECT_EQ(AttributeKey(data.input),
-              deserialize<AttributeKey>(SExpression::createString(data.input)));
+              deserialize<AttributeKey>(SExpression::createString(data.input),
+                                        qApp->getFileFormatVersion()));
   } else {
     EXPECT_THROW(
-        deserialize<AttributeKey>(SExpression::createString(data.input)),
+        deserialize<AttributeKey>(SExpression::createString(data.input),
+                                  qApp->getFileFormatVersion()),
         RuntimeError);
   }
 }

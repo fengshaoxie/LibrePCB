@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/attributes/attribute.h>
 #include <librepcb/common/attributes/attrtypevoltage.h>
 
@@ -63,9 +64,10 @@ TEST_P(AttributeTest, testConstructFromSExpression) {
   SExpression sexpr = SExpression::parse(data.serialized, FilePath());
 
   if (data.validSExpression) {
-    EXPECT_EQ(attribute, Attribute(sexpr));
+    EXPECT_EQ(attribute, Attribute(sexpr, qApp->getFileFormatVersion()));
   } else {
-    EXPECT_THROW({ Attribute a(sexpr); }, Exception);
+    EXPECT_THROW({ Attribute a(sexpr, qApp->getFileFormatVersion()); },
+                 Exception);
   }
 }
 

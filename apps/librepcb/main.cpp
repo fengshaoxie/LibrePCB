@@ -246,7 +246,7 @@ static int openWorkspace(const FilePath& path) noexcept {
       }
     }
 
-    Workspace ws(path);  // can throw
+    Workspace ws(path, qApp->getFileFormatVersion());  // can throw
 
     // Now since workspace settings are loaded, switch to the locale defined
     // there (until now, the system locale was used).

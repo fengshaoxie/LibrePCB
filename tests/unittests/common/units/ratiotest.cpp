@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/units/ratio.h>
 
 #include <QtCore>
@@ -194,17 +195,20 @@ TEST_P(RatioTest, testDeserialize) {
   const RatioTestData_t& data = GetParam();
 
   SExpression sexpr = SExpression::createString(data.string);
-  EXPECT_EQ(data.ratio, deserialize<Ratio>(sexpr));
+  EXPECT_EQ(data.ratio,
+            deserialize<Ratio>(sexpr, qApp->getFileFormatVersion()));
 }
 
 TEST(RatioTest, testDeserializeEmpty) {
   SExpression sexpr = SExpression::createString("");
-  EXPECT_THROW(deserialize<Ratio>(sexpr), RuntimeError);
+  EXPECT_THROW(deserialize<Ratio>(sexpr, qApp->getFileFormatVersion()),
+               RuntimeError);
 }
 
 TEST(RatioTest, testDeserializeInvalid) {
   SExpression sexpr = SExpression::createString("foo");
-  EXPECT_THROW(deserialize<Ratio>(sexpr), RuntimeError);
+  EXPECT_THROW(deserialize<Ratio>(sexpr, qApp->getFileFormatVersion()),
+               RuntimeError);
 }
 
 /*******************************************************************************

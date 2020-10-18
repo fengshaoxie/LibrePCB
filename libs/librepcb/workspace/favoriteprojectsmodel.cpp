@@ -40,8 +40,8 @@ namespace workspace {
  *  Constructors / Destructor
  ******************************************************************************/
 
-FavoriteProjectsModel::FavoriteProjectsModel(
-    const Workspace& workspace) noexcept
+FavoriteProjectsModel::FavoriteProjectsModel(const Workspace& workspace,
+                                             const Version& fileFormat) noexcept
   : QAbstractListModel(nullptr), mWorkspace(workspace) {
   try {
     mFilePath = mWorkspace.getMetadataPath().getPathTo("favorite_projects.lp");
@@ -50,7 +50,7 @@ FavoriteProjectsModel::FavoriteProjectsModel(
           SExpression::parse(FileUtils::readFile(mFilePath), mFilePath);
       const QList<SExpression>& childs = root.getChildren("project");
       foreach (const SExpression& child, childs) {
-        QString path = deserialize<QString>(child.getChild("@0"));
+        QString path = deserialize<QString>(child.getChild("@0"), fileFormat);
         FilePath absPath = FilePath::fromRelative(mWorkspace.getPath(), path);
         mAllProjects.append(absPath);
       }

@@ -76,7 +76,7 @@ TEST_F(WorkspaceTest, testCreateOpenClose) {
 
   // open/close workspace
   {
-    Workspace ws(mWsDir);
+    Workspace ws(mWsDir, qApp->getFileFormatVersion());
     EXPECT_EQ(mWsDir, ws.getPath());
     EXPECT_EQ(mProjectsPath, ws.getProjectsPath());
     EXPECT_EQ(mMetadataPath, ws.getMetadataPath());
@@ -84,11 +84,11 @@ TEST_F(WorkspaceTest, testCreateOpenClose) {
   }
 
   // open/close workspace again
-  { Workspace ws(mWsDir); }
+  { Workspace ws(mWsDir, qApp->getFileFormatVersion()); }
 }
 
 TEST_F(WorkspaceTest, testOpenNonExistingWorkspace) {
-  EXPECT_THROW(Workspace ws(mWsDir), Exception);
+  EXPECT_THROW(Workspace ws(mWsDir, qApp->getFileFormatVersion()), Exception);
 }
 
 TEST_F(WorkspaceTest, testOpenIncompatibleWorkspaceVersion) {
@@ -99,13 +99,13 @@ TEST_F(WorkspaceTest, testOpenIncompatibleWorkspaceVersion) {
   versionFile.setVersion(
       Version::fromString("0.0.1"));  // version 0.0.1 will never exist
   FileUtils::writeFile(mVersionFile, versionFile.toByteArray());
-  EXPECT_THROW(Workspace ws(mWsDir), Exception);
+  EXPECT_THROW(Workspace ws(mWsDir, qApp->getFileFormatVersion()), Exception);
 }
 
 TEST_F(WorkspaceTest, testIfOpeningWorkspaceMultipleTimesFails) {
   Workspace::createNewWorkspace(mWsDir);
-  Workspace w1s(mWsDir);
-  EXPECT_THROW(Workspace ws2(mWsDir), Exception);
+  Workspace w1s(mWsDir, qApp->getFileFormatVersion());
+  EXPECT_THROW(Workspace ws2(mWsDir, qApp->getFileFormatVersion()), Exception);
 }
 
 TEST_F(WorkspaceTest, testIsValidWorkspacePath) {
@@ -118,7 +118,7 @@ TEST_F(WorkspaceTest, testGetFileFormatVersionsOfWorkspace) {
   EXPECT_TRUE(Workspace::getFileFormatVersionsOfWorkspace(mWsDir).isEmpty());
   Workspace::createNewWorkspace(mWsDir);
   EXPECT_TRUE(Workspace::getFileFormatVersionsOfWorkspace(mWsDir).isEmpty());
-  Workspace ws(mWsDir);
+  Workspace ws(mWsDir, qApp->getFileFormatVersion());
   EXPECT_EQ(QList<Version>{qApp->getFileFormatVersion()},
             Workspace::getFileFormatVersionsOfWorkspace(mWsDir));
 }
@@ -129,7 +129,7 @@ TEST_F(WorkspaceTest, testGetHighestFileFormatVersionOfWorkspace) {
   Workspace::createNewWorkspace(mWsDir);
   EXPECT_FALSE(
       Workspace::getHighestFileFormatVersionOfWorkspace(mWsDir).has_value());
-  Workspace ws(mWsDir);
+  Workspace ws(mWsDir, qApp->getFileFormatVersion());
   EXPECT_EQ(qApp->getFileFormatVersion(),
             Workspace::getHighestFileFormatVersionOfWorkspace(mWsDir));
 }

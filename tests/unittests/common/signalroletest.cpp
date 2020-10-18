@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/signalrole.h>
 
 #include <QtCore>
@@ -48,17 +49,20 @@ TEST(SignalRoleTest, testSerialize) {
 
 TEST(SignalRoleTest, testDeserialize) {
   SExpression sexpr = SExpression::createString("opendrain");
-  EXPECT_EQ(SignalRole::opendrain(), deserialize<SignalRole>(sexpr));
+  EXPECT_EQ(SignalRole::opendrain(),
+            deserialize<SignalRole>(sexpr, qApp->getFileFormatVersion()));
 }
 
 TEST(SignalRoleTest, testDeserializeEmpty) {
   SExpression sexpr = SExpression::createString("");
-  EXPECT_THROW(deserialize<SignalRole>(sexpr), RuntimeError);
+  EXPECT_THROW(deserialize<SignalRole>(sexpr, qApp->getFileFormatVersion()),
+               RuntimeError);
 }
 
 TEST(SignalRoleTest, testDeserializeInvalid) {
   SExpression sexpr = SExpression::createString("foo");
-  EXPECT_THROW(deserialize<SignalRole>(sexpr), RuntimeError);
+  EXPECT_THROW(deserialize<SignalRole>(sexpr, qApp->getFileFormatVersion()),
+               RuntimeError);
 }
 
 /*******************************************************************************

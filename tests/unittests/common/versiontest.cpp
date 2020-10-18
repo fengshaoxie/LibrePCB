@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/version.h>
 
 #include <QtCore>
@@ -246,17 +247,20 @@ TEST(VersionTest, testSerialize) {
 
 TEST(VersionTest, testDeserialize) {
   SExpression sexpr = SExpression::createString("0.1");
-  EXPECT_EQ(Version::fromString("0.1"), deserialize<Version>(sexpr));
+  EXPECT_EQ(Version::fromString("0.1"),
+            deserialize<Version>(sexpr, qApp->getFileFormatVersion()));
 }
 
 TEST(VersionTest, testDeserializeEmpty) {
   SExpression sexpr = SExpression::createString("");
-  EXPECT_THROW(deserialize<Version>(sexpr), RuntimeError);
+  EXPECT_THROW(deserialize<Version>(sexpr, qApp->getFileFormatVersion()),
+               RuntimeError);
 }
 
 TEST(VersionTest, testDeserializeInvalid) {
   SExpression sexpr = SExpression::createString("foo");
-  EXPECT_THROW(deserialize<Version>(sexpr), RuntimeError);
+  EXPECT_THROW(deserialize<Version>(sexpr, qApp->getFileFormatVersion()),
+               RuntimeError);
 }
 
 /*******************************************************************************

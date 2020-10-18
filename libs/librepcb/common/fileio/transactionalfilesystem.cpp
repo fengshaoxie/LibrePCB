@@ -22,6 +22,7 @@
  ******************************************************************************/
 #include "transactionalfilesystem.h"
 
+#include "../application.h"
 #include "../toolbox.h"
 #include "fileutils.h"
 #include "sexpression.h"
@@ -474,19 +475,23 @@ void TransactionalFileSystem::loadDiff(const FilePath& fp) {
   SExpression root =
       SExpression::parse(FileUtils::readFile(fp), fp);  // can throw
   QString modifiedFilesDirName =
-      deserialize<QString>(root.getChild("modified_files_directory/@0"));
+      deserialize<QString>(root.getChild("modified_files_directory/@0"),
+                           qApp->getFileFormatVersion());
   FilePath modifiedFilesDir = fp.getParentDir().getPathTo(modifiedFilesDirName);
   foreach (const SExpression& node, root.getChildren("modified_file")) {
-    QString relPath = deserialize<QString>(node.getChild("@0"));
+    QString relPath =
+        deserialize<QString>(node.getChild("@0"), qApp->getFileFormatVersion());
     FilePath absPath = modifiedFilesDir.getPathTo(relPath);
     mModifiedFiles.insert(relPath, FileUtils::readFile(absPath));  // can throw
   }
   foreach (const SExpression& node, root.getChildren("removed_file")) {
-    QString relPath = deserialize<QString>(node.getChild("@0"));
+    QString relPath =
+        deserialize<QString>(node.getChild("@0"), qApp->getFileFormatVersion());
     mRemovedFiles.insert(relPath);
   }
   foreach (const SExpression& node, root.getChildren("removed_directory")) {
-    QString relPath = deserialize<QString>(node.getChild("@0"));
+    QString relPath =
+        deserialize<QString>(node.getChild("@0"), qApp->getFileFormatVersion());
     mRemovedDirs.insert(relPath);
   }
 }

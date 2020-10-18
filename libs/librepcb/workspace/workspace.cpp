@@ -55,7 +55,7 @@ namespace workspace {
  *  Constructors / Destructor
  ******************************************************************************/
 
-Workspace::Workspace(const FilePath& wsPath)
+Workspace::Workspace(const FilePath& wsPath, const Version& fileFormat)
   : QObject(nullptr),
     mPath(wsPath),
     mProjectsPath(mPath.getPathTo("projects")),
@@ -113,15 +113,15 @@ Workspace::Workspace(const FilePath& wsPath)
   // all OK, let's load the workspace stuff!
 
   // load workspace settings
-  mWorkspaceSettings.reset(
-      new WorkspaceSettings(mMetadataPath.getPathTo("settings.lp"), this));
+  mWorkspaceSettings.reset(new WorkspaceSettings(
+      mMetadataPath.getPathTo("settings.lp"), fileFormat, this));
 
   // load library database
   mLibraryDb.reset(new WorkspaceLibraryDb(*this));  // can throw
 
   // load project models
-  mRecentProjectsModel.reset(new RecentProjectsModel(*this));
-  mFavoriteProjectsModel.reset(new FavoriteProjectsModel(*this));
+  mRecentProjectsModel.reset(new RecentProjectsModel(*this, fileFormat));
+  mFavoriteProjectsModel.reset(new FavoriteProjectsModel(*this, fileFormat));
   mProjectTreeModel.reset(new ProjectTreeModel(*this));
 }
 

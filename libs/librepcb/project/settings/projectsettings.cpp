@@ -38,7 +38,8 @@ namespace project {
  *  Constructors / Destructor
  ******************************************************************************/
 
-ProjectSettings::ProjectSettings(Project& project, bool create)
+ProjectSettings::ProjectSettings(Project& project, const Version& fileFormat,
+                                 bool create)
   : QObject(nullptr), mProject(project) {
   qDebug() << "load settings...";
 
@@ -57,13 +58,14 @@ ProjectSettings::ProjectSettings(Project& project, bool create)
     // locale order
     foreach (const SExpression& node,
              root.getChild("library_locale_order").getChildren()) {
-      mLocaleOrder.append(deserialize<QString>(node.getChild("@0")));
+      mLocaleOrder.append(
+          deserialize<QString>(node.getChild("@0"), fileFormat));
     }
 
     // norm order
     foreach (const SExpression& node,
              root.getChild("library_norm_order").getChildren()) {
-      mNormOrder.append(deserialize<QString>(node.getChild("@0")));
+      mNormOrder.append(deserialize<QString>(node.getChild("@0"), fileFormat));
     }
   }
 

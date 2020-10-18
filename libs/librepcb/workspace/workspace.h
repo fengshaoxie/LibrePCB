@@ -70,12 +70,13 @@ public:
   /**
    * @brief Constructor to open an existing workspace
    *
-   * @param wsPath    The filepath to the workspace directory
+   * @param wsPath      The filepath to the workspace directory.
+   * @param fileFormat  The file format of the workspace.
    *
    * @throw Exception If the workspace could not be opened, this constructor
    * throws an exception.
    */
-  explicit Workspace(const FilePath& wsPath);
+  Workspace(const FilePath& wsPath, const Version& fileFormat);
 
   /**
    * The destructor

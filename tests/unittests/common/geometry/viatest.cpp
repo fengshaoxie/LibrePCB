@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/geometry/via.h>
 
 /*******************************************************************************
@@ -45,7 +46,7 @@ TEST_F(ViaTest, testSerializeAndDeserialize) {
            PositiveLength(789), PositiveLength(321));
   SExpression sexpr1 = obj1.serializeToDomElement("via");
 
-  Via obj2(sexpr1);
+  Via obj2(sexpr1, qApp->getFileFormatVersion());
   SExpression sexpr2 = obj2.serializeToDomElement("via");
 
   EXPECT_EQ(sexpr1.toByteArray(), sexpr2.toByteArray());

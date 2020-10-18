@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <gtest/gtest.h>
+#include <librepcb/common/application.h>
 #include <librepcb/common/uuid.h>
 
 #include <QtCore>
@@ -192,11 +193,18 @@ TEST_P(UuidTest, testDeserialize) {
   const UuidTestData& data = GetParam();
   SExpression sexpr = SExpression::createToken(data.uuid);
   if (data.valid) {
-    EXPECT_EQ(data.uuid, deserialize<Uuid>(sexpr).toStr());
-    EXPECT_EQ(data.uuid, deserialize<tl::optional<Uuid>>(sexpr)->toStr());
+    EXPECT_EQ(data.uuid,
+              deserialize<Uuid>(sexpr, qApp->getFileFormatVersion()).toStr());
+    EXPECT_EQ(
+        data.uuid,
+        deserialize<tl::optional<Uuid>>(sexpr, qApp->getFileFormatVersion())
+            ->toStr());
   } else {
-    EXPECT_THROW(deserialize<Uuid>(sexpr), Exception);
-    EXPECT_THROW(deserialize<tl::optional<Uuid>>(sexpr), Exception);
+    EXPECT_THROW(deserialize<Uuid>(sexpr, qApp->getFileFormatVersion()),
+                 Exception);
+    EXPECT_THROW(
+        deserialize<tl::optional<Uuid>>(sexpr, qApp->getFileFormatVersion()),
+        Exception);
   }
 }
 
@@ -207,7 +215,9 @@ TEST(UuidTest, testSerializeOptional) {
 
 TEST(UuidTest, testDeserializeOptional) {
   SExpression sexpr = SExpression::createToken("none");
-  EXPECT_EQ(tl::nullopt, deserialize<tl::optional<Uuid>>(sexpr));
+  EXPECT_EQ(
+      tl::nullopt,
+      deserialize<tl::optional<Uuid>>(sexpr, qApp->getFileFormatVersion()));
 }
 
 /*******************************************************************************
